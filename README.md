@@ -1,5 +1,3 @@
-# fMSX
-fMSX is an emulator made by Marat Fyzullin. It is not open source and don't let commercial use of it but it is easy to port to many devices. 
 
 
 fMSX for PlayStation 4
