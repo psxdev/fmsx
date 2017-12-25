@@ -248,10 +248,10 @@ fMSX for PlayStation 4
  
  You can choose MSX MSX2 and MSX2+ and PAL or NTSC.
  
- Red power button let you reset the sysmte and go to basic prompt
- You can choose 2 cart slot, 2 floppy and 1 cassete files when you are in ugly browser after press x in the file who has the * it will load the file, later you will see reset the system and load is done
+ Red power button let you reset the system and go to basic prompt.
+ You can choose 2 cart slot, 2 floppy and 1 cassete files. When you are in ugly browser after press x in the file who has the * it will load the file, later you will see reset the system and load is done
  
- 6) I wait that this can help to developers really interested in homebrew in you want piracy this is not for you. Respect the licenses from fMSX part please.
+ 6) I wait that this can help to developers really interested in homebrew if you want piracy this is not for you. Respect the licenses from fMSX part please.
 
 
   Change log
