@@ -1,0 +1,133 @@
+#ifndef _MENU_H_
+#define _MENU_H_
+
+#include <debugnet.h>
+
+#define RED_COLOR 0x80ff0000
+#define YELLOW_COLOR 0x80ffff00 
+#define BACKGROUND_FILE_PATH "host0:system/background.png"
+#define ICONS_FILE_PATH "host0:system/fmsxtexture.png"
+
+#define ICON_ABOUT_MASK_X 520
+#define ICON_ABOUT_MASK_Y 145
+#define ICON_ABOUT_MASK_W 245
+#define ICON_ABOUT_MASK_H 105
+
+#define ICON_MSX1_MASK_X 262
+#define ICON_MSX1_MASK_Y 266
+#define ICON_MSX1_MASK_W 205
+#define ICON_MSX1_MASK_H 90
+
+#define ICON_MSX2_MASK_X 469
+#define ICON_MSX2_MASK_Y 266
+#define ICON_MSX2_MASK_W 250
+#define ICON_MSX2_MASK_H 90
+
+#define ICON_MSX2PLUS_MASK_X 721
+#define ICON_MSX2PLUS_MASK_Y 266
+#define ICON_MSX2PLUS_MASK_W 300
+#define ICON_MSX2PLUS_MASK_H 90
+
+#define ICON_VIDEO_NTSC_MASK_X 507
+#define ICON_VIDEO_NTSC_MASK_Y 397
+#define ICON_VIDEO_NTSC_MASK_W 152
+#define ICON_VIDEO_NTSC_MASK_H 51
+
+#define ICON_VIDEO_PAL_MASK_X 670
+#define ICON_VIDEO_PAL_MASK_Y 397
+#define ICON_VIDEO_PAL_MASK_W 105
+#define ICON_VIDEO_PAL_MASK_H 51
+ 
+#define ICON_RESET_MASK_X 361
+#define ICON_RESET_MASK_Y 495
+#define ICON_RESET_MASK_W 68
+#define ICON_RESET_MASK_H 80
+
+#define ICON_MEGAROM1_MASK_X 429
+#define ICON_MEGAROM1_MASK_Y 495
+#define ICON_MEGAROM1_MASK_W 111
+#define ICON_MEGAROM1_MASK_H 80
+
+#define ICON_MEGAROM2_MASK_X 541
+#define ICON_MEGAROM2_MASK_Y 495
+#define ICON_MEGAROM2_MASK_W 111
+#define ICON_MEGAROM2_MASK_H 80
+
+#define ICON_DISKA_MASK_X 651
+#define ICON_DISKA_MASK_Y 491
+#define ICON_DISKA_MASK_W 85
+#define ICON_DISKA_MASK_H 87
+
+#define ICON_DISKB_MASK_X 736
+#define ICON_DISKB_MASK_Y 491
+#define ICON_DISKB_MASK_W 85
+#define ICON_DISKB_MASK_H 87
+
+#define ICON_TAPE_MASK_X 821
+#define ICON_TAPE_MASK_Y 495
+#define ICON_TAPE_MASK_W 102
+#define ICON_TAPE_MASK_H 80
+
+
+
+
+enum MENU_LEVEL {
+	MENU_ABOUT,
+	MENU_MSX1,
+	MENU_MSX2,
+	MENU_MSX2PLUS,
+	MENU_VIDEO_NTSC,
+	MENU_VIDEO_PAL,
+	MENU_RESET,
+	MENU_MEGAROM1,
+	MENU_MEGAROM2,
+	MENU_DISKA,
+	MENU_DISKB,
+	MENU_TAPE,
+};
+
+enum MENU_SELECT_STATUS {
+	MENU_NOT_SELECTED,
+	MENU_ABOUT_SELECTED,
+	MENU_MSX1_SELECTED,
+	MENU_MSX2_SELECTED,
+	MENU_MSX2PLUS_SELECTED,
+	MENU_VIDEO_NTSC_SELECTED,
+	MENU_VIDEO_PAL_SELECTED,
+	MENU_RESET_SELECTED,
+	MENU_MEGAROM1_SELECTED,
+	MENU_MEGAROM2_SELECTED,
+	MENU_DISKA_SELECTED,
+	MENU_DISKB_SELECTED,
+	MENU_TAPE_SELECTED,
+};
+
+enum MENU_CONTEXT_STATUS{
+	MENU_CONTEXT_CLOSED,
+	MENU_CONTEXT_CLOSING,
+	MENU_CONTEXT_OPENED,
+	MENU_CONTEXT_OPENING,
+};
+int menuGetStatus();
+int menuGetLevel();
+int menuGetContextStatus();
+float menuGetContextHeight();
+void menuSetStatus(int status);
+void menuSetLevel(int level);
+void menuSetContextStatus(int status);
+void menuSetContextHeight(float height);
+//DRAW MENUS TEXTURES
+void menuDrawIcons();
+void menuDrawIconsMaskSelect();
+
+//PUBLIC
+int menuInit();
+void menuFinish();
+void menuLevelUp();
+void menuLevelDown();
+void menuLevelLeft();
+void menuLevelRight();
+void menuDraw();
+void menuStatusChange();
+
+#endif
