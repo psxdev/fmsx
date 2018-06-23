@@ -6,7 +6,6 @@
 
 #include <orbisPad.h>
 #include <orbis2d.h>
-#include <logdebug.h>
 #include <orbisFileBrowser.h>
 #include <orbisXbmFont.h>
 #include "menu.h"
@@ -31,7 +30,7 @@ void browserUpdateController()
 	{
 		if(orbisPadGetButtonPressed(ORBISPAD_UP))
 		{
-			sys_log("Up pressed\n");
+			debugNetPrintf(DEBUG,"Up pressed\n");
 			orbisFileBrowserEntryUp();
 			currentEntry=orbisFileBrowserListGetNthEntry(orbisFileBrowserGetBasePos()+orbisFileBrowserGetRelPos());
 			if(currentEntry!=NULL)
@@ -41,7 +40,7 @@ void browserUpdateController()
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_DOWN))
 		{
-			sys_log("Down pressed\n");
+			debugNetPrintf(DEBUG,"Down pressed\n");
 			orbisFileBrowserEntryDown();
 			currentEntry=orbisFileBrowserListGetNthEntry(orbisFileBrowserGetBasePos()+orbisFileBrowserGetRelPos());
 			if(currentEntry!=NULL)
@@ -51,12 +50,12 @@ void browserUpdateController()
 		}						
 		if(orbisPadGetButtonPressed(ORBISPAD_CIRCLE))
 		{
-			sys_log("Circle pressed come back to menu\n");
+			debugNetPrintf(DEBUG,"Circle pressed come back to menu\n");
 			comeBack=1;
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_CROSS))
 		{
-			sys_log("Cross pressed\n");
+			debugNetPrintf(DEBUG,"Cross pressed\n");
 			notSelected=0;
 			entry=orbisFileBrowserListGetNthEntry(orbisFileBrowserGetBasePos()+orbisFileBrowserGetRelPos());
 			if(entry!=NULL)
@@ -116,7 +115,7 @@ void browserDraw()
 			
 			if(entry!=NULL)
 			{
-				//sys_log("%s %d\n",entry->name,entry->type);
+				//debugNetPrintf(DEBUG,("%s %d\n",entry->name,entry->type);
 				if(i==orbisFileBrowserGetRelPos())
 				{
 					print_text(180,200+i*(FONT_H+5),"*");

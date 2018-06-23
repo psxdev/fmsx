@@ -8,7 +8,6 @@
 
 #include <kernel.h>
 #include <systemservice.h>
-#include <logdebug.h>
 #include <orbis2d.h>
 #include <orbisPad.h>
 #include <orbisAudio.h>
@@ -17,6 +16,18 @@
 #include <debugnet.h>
 #include <orbisFileBrowser.h>
 #include "menu.h"
+
+typedef struct OrbisGlobalConf
+{
+	Orbis2dConfig *conf;
+	OrbisPadConfig *confPad;
+	OrbisAudioConfig *confAudio;
+	ps4LinkConfiguration *confLink;
+	int orbisLinkFlag;
+}OrbisGlobalConf;
+
+OrbisGlobalConf *myConf;
+
 
 int x=1280/2;
 int y=720/2;
@@ -47,16 +58,6 @@ void initApp()
 {
 	int ret;
 
-	ret=ps4LinkInit("192.168.1.3",0x4711,0x4712,0x4712,INFO);
-	if(!ret)
-	{
-		ps4LinkFinish();
-		return;
-	}
-	while(!ps4LinkRequestsIsConnected())
-	{
-		
-	}
 	debugNetPrintf(DEBUG,"[PS4LINK] Initialized and connected from pc/mac ready to receive commands\n");
 	
 	orbisFileBrowserInit("host0:GAMES");
@@ -66,22 +67,22 @@ void initApp()
 	sceSystemServiceHideSplashScreen();
 	
 	
-	ret=orbisPadInit();
+	ret=orbisPadInitWithConf(myConf->confPad);
 	
 	if(ret==1)
 	{
 		
 	
 		confPad=orbisPadGetConf();
-		ret=orbis2dInit();
+		ret=orbis2dInitWithConf(myConf->conf);
 		if(ret==1)
 		{
 			conf=orbis2dGetConf();
 			flag=1;
-			ret=orbisAudioInit();
+			ret=orbisAudioInitWithConf(myConf->confAudio);
 			if(ret==1)
 			{
-				ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,512,48000,ORBISAUDIO_FORMAT_S16_MONO);
+				//ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,512,48000,ORBISAUDIO_FORMAT_S16_MONO);
 				//ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,1024,48000,ORBISAUDIO_FORMAT_S16_STEREO);
 				debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",orbisKeyboardInit());
 				sleep(1);
@@ -92,10 +93,19 @@ void initApp()
 	}
 	
 }
-int main(uint64_t stackbase, uint64_t othervalue) 
+int main(int argc, char *argv[])
 {
 	int ret;
 
+	uintptr_t intptr=0;
+	sscanf(argv[1],"%p",&intptr);
+	myConf=(OrbisGlobalConf *)intptr;
+	ret=ps4LinkInitWithConf(myConf->confLink);
+	if(!ret)
+	{
+		ps4LinkFinish();
+		return 0;
+	}
 	initApp();
 	
 	

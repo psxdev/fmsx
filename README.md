@@ -17,76 +17,26 @@ fMSX for PlayStation 4
   What do you need to compile it?
 ==================
 
- 1) You will need ps4sdk fork and liborbis from my own repository
+ 1) You will need ps4sdk fork branch firmware505 and liborbis from my own repository
 
-  
+  Follow steps in readme
   ```
-  git clone https://github.com/psxdev/liborbis
-  cd liborbis
-  cd orbislink
-  cd libdebugnet
-  make
-  make install
-  cd ..
-  cd libelfloader
-  make
-  make install
-  cd ..
-  cd libps4link
-  make
-  make install
-  cd ../..
-  cd portlibs
-  cd zlib
-  make
-  make install
-  cd ..
-  cd libpng
-  make
-  make install
-  cd ../..
-  cd liborbis2d
-  make
-  make install
-  cd ..
-  cd liborbisPad
-  make
-  make install
-  cd ..
-  cd liborbisAudio
-  make 
-  make install
-  cd ..
-  cd liborbisKeyboard
-  make
-  make install
-  cd ..
-  cd liborbisFileBrowser
-  make
-  make install
-  cd ..
-  cd liborbisXmbFont
-  make
-  make install
-  cd ..
-  cd libmod
-  make
-  make install
-  cd ..
+  git clone https://github.com/orbisdev/liborbis
+  
   ```
   
   
  2) Compile fmsx
   
   
-  change your linux/mac ip in eboot_plugin.c
+  
   
   ```
   git clone https://github.com/psxdev/fmsx
   cd fmsx
   make
   ```
-  copy bin/fmsx to use it like eboot_plugin 
+  copy bin/fmsx to use it like homebrew.elf in ps4sh
 
  3) You will need ps4sh because all is loaded from host
  	
@@ -112,9 +62,9 @@ fMSX for PlayStation 4
   
   
   
- 4) Before execute eboot_plugin you need ps4sh running on directory where system and GAMES folders are created. You can use bluetooth keyboard so enable it before load eboot_plugin
+ 4) Before execute homebrew.elf you need ps4sh running on directory where system and GAMES folders are created. Load orbislink pkg and you will see logs in your ps4sh tool
  
- After you see PlayRoom splash screen execute connect command on ps4sh
+ After you see orbislink splash screen execute connect command on ps4sh
   
  ```
  bigmini:bin bigboss$ ./ps4sh
@@ -257,6 +207,7 @@ fMSX for PlayStation 4
   Change log
 ===========================
  - 25/12/2017 Initial release
+ - 23/06/2018 5.05 support
  
 
   Credits

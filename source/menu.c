@@ -8,7 +8,6 @@
 #include "browser.h"
 #include <orbisPad.h>
 #include <orbis2d.h>
-#include <logdebug.h>
 
 int menuLevel=MENU_ABOUT;
 int menuStatus=MENU_NOT_SELECTED;
@@ -52,27 +51,27 @@ void menuAction()
 			menuClosed=0;
 			showBrowser(MENU_MEGAROM1);
 			menuClosed=1;
-			//LoadCart("host0:ROM/GRADIUS2.ROM",0,MAP_GUESS);
+			//LoadCart("host0:GAMES/GRADIUS2.ROM",0,MAP_GUESS);
 			break;
 		case MENU_MEGAROM2_SELECTED:
 			menuStatus=MENU_NOT_SELECTED;
 			showBrowser(MENU_MEGAROM2);
-			//LoadCart("host0:ROM/SOLIDE12.ROM",0,MAP_GUESS);
+			//LoadCart("host0:GAMES/SOLIDE12.ROM",0,MAP_GUESS);
 			break;
 		case MENU_DISKA_SELECTED:
 			menuStatus=MENU_NOT_SELECTED;
 			showBrowser(MENU_DISKA);
-			//LoadFileDrive("host0:DSK/ABADIA.DSK",0);
+			//LoadFileDrive("host0:GAMES/ABADIA.DSK",0);
 			break;
 		case MENU_DISKB_SELECTED:
 			menuStatus=MENU_NOT_SELECTED;
 			showBrowser(MENU_DISKB);
-			//LoadFileDrive("host0:DSK/DRIVEB.DSK",1);
+			//LoadFileDrive("host0:GAMES/DRIVEB.DSK",1);
 			break;
 		case MENU_TAPE_SELECTED:
 			menuStatus=MENU_NOT_SELECTED;
 			showBrowser(MENU_TAPE);
-			//ChangeTape("host0:CAS/DEFAULT.CAS");
+			//ChangeTape("host0:GAMES/DEFAULT.CAS");
 			break;
 		default:
 			menuStatus=MENU_NOT_SELECTED;
@@ -89,14 +88,14 @@ void updateController()
 	{
 		if(orbisPadGetButtonPressed(ORBISPAD_L2|ORBISPAD_R2) || orbisPadGetButtonHold(ORBISPAD_L2|ORBISPAD_R2))
 		{
-			sys_log("Combo L2R2 pressed\n");
+			debugNetPrintf(DEBUG,"Combo L2R2 pressed\n");
 			buttons=orbisPadGetCurrentButtonsPressed();
 			buttons&= ~(ORBISPAD_L2|ORBISPAD_R2);
 			orbisPadSetCurrentButtonsPressed(buttons);
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_L1|ORBISPAD_R1) )
 		{
-			sys_log("Combo L1R1 pressed\n");
+			debugNetPrintf(DEBUG,"Combo L1R1 pressed\n");
 			buttons=orbisPadGetCurrentButtonsPressed();
 			buttons&= ~(ORBISPAD_L1|ORBISPAD_R1);
 			orbisPadSetCurrentButtonsPressed(buttons);
@@ -104,7 +103,7 @@ void updateController()
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_L1|ORBISPAD_R2) || orbisPadGetButtonHold(ORBISPAD_L1|ORBISPAD_R2))
 		{
-			sys_log("Combo L1R2 pressed\n");
+			debugNetPrintf(DEBUG,"Combo L1R2 pressed\n");
 			buttons=orbisPadGetCurrentButtonsPressed();
 			buttons&= ~(ORBISPAD_L1|ORBISPAD_R2);
 			orbisPadSetCurrentButtonsPressed(buttons);
@@ -113,7 +112,7 @@ void updateController()
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_L2|ORBISPAD_R1) || orbisPadGetButtonHold(ORBISPAD_L2|ORBISPAD_R1) )
 		{
-			sys_log("Combo L2R1 pressed\n");
+			debugNetPrintf(DEBUG,"Combo L2R1 pressed\n");
 			buttons=orbisPadGetCurrentButtonsPressed();
 			buttons&= ~(ORBISPAD_L2|ORBISPAD_R1);
 			orbisPadSetCurrentButtonsPressed(buttons);
@@ -121,41 +120,41 @@ void updateController()
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_UP))
 		{
-			sys_log("Up pressed\n");
+			debugNetPrintf(DEBUG,"Up pressed\n");
 			menuLevelUp();
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_DOWN))
 		{
-			sys_log("Down pressed\n");
+			debugNetPrintf(DEBUG,"Down pressed\n");
 			menuLevelDown();
 		}						
 		if(orbisPadGetButtonPressed(ORBISPAD_RIGHT))
 		{
-			sys_log("Right pressed\n");
+			debugNetPrintf(DEBUG,"Right pressed\n");
 			menuLevelRight();
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_LEFT))
 		{
-			sys_log("Left pressed\n");
+			debugNetPrintf(DEBUG,"Left pressed\n");
 			menuLevelLeft();
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_TRIANGLE))
 		{
-			sys_log("Triangle pressed exit\n");
+			debugNetPrintf(DEBUG,"Triangle pressed exit\n");
 			
 			flag=0;
 				
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_CIRCLE))
 		{
-			sys_log("Circle pressed come back to MSX\n");
+			debugNetPrintf(DEBUG,"Circle pressed come back to MSX\n");
 			menuClosed=1;
 			menuExit=1;
 			
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_CROSS))
 		{
-			sys_log("Cross pressed\n");
+			debugNetPrintf(DEBUG,"Cross pressed\n");
 			menuStatusChange();
 			menuClosed=1;
 			//menuSetContextStatus(MENU_CONTEXT_OPENING);
@@ -164,27 +163,27 @@ void updateController()
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_SQUARE))
 		{
-			sys_log("Square pressed\n");
+			debugNetPrintf(DEBUG,"Square pressed\n");
 			//orbisAudioPause(0);				
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_L1))
 		{
-			sys_log("L1 pressed\n");
+			debugNetPrintf(DEBUG,"L1 pressed\n");
 			
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_L2))
 		{
-			sys_log("L2 pressed\n");
+			debugNetPrintf(DEBUG,"L2 pressed\n");
 			
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_R1))
 		{
-			sys_log("R1 pressed\n");
+			debugNetPrintf(DEBUG,"R1 pressed\n");
 			
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_R2))
 		{
-			sys_log("R2 pressed\n");
+			debugNetPrintf(DEBUG,"R2 pressed\n");
 			
 		}	
 	}
