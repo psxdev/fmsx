@@ -13,6 +13,7 @@
 #include <orbisAudio.h>
 #include <modplayer.h>
 #include <ps4link.h>
+#include <orbisKeyboard.h>
 #include <debugnet.h>
 #include <orbisFileBrowser.h>
 #include "menu.h"
@@ -22,6 +23,7 @@ typedef struct OrbisGlobalConf
 	Orbis2dConfig *conf;
 	OrbisPadConfig *confPad;
 	OrbisAudioConfig *confAudio;
+	OrbisKeyboardConfig *confKeyboard;
 	ps4LinkConfiguration *confLink;
 	int orbisLinkFlag;
 }OrbisGlobalConf;
@@ -82,11 +84,12 @@ void initApp()
 			ret=orbisAudioInitWithConf(myConf->confAudio);
 			if(ret==1)
 			{
+				orbisKeyboardInitWithConf(myConf->confKeyboard);
 				//ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,512,48000,ORBISAUDIO_FORMAT_S16_MONO);
 				//ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,1024,48000,ORBISAUDIO_FORMAT_S16_STEREO);
-				debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",orbisKeyboardInit());
-				sleep(1);
-				debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",orbisKeyboardOpen());
+				//debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",orbisKeyboardInit());
+				//sleep(1);
+				//debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",orbisKeyboardOpen());
 			
 			}
 		}
