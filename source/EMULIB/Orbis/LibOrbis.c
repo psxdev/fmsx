@@ -103,7 +103,7 @@ int ShowVideo(void)
     	ScaleImage(&OutImg,VideoImg,VideoX,VideoY,VideoW,VideoH);
 	
 		orbis2dStartDrawing();
-		orbis2dClearBuffer();
+		orbis2dClearBuffer(0);
 		orbis2dPutImage(OutImg.Data, 0, 0, 1280, 720);
 	
 	

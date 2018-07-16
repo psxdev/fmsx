@@ -638,7 +638,7 @@ void menuOpen()
 		orbis2dStartDrawing();
 
 		// clear with background (default white) to the current display buffer 
-		orbis2dClearBuffer();
+		orbis2dClearBuffer(0);
 			
 		//default red is here press X to random color
 		//orbis2dDrawRectColor(x,w,y,h,color);

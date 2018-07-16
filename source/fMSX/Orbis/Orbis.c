@@ -204,7 +204,7 @@ void myPutImage(void)
    // if (LastScrMode!=ScrMode) ResetView();
 	
 	orbis2dStartDrawing();
-	orbis2dClearBuffer();
+	orbis2dClearBuffer(0);
 	orbis2dPutImage(VideoImg->Data, 0, 0, VideoW, VideoH);
 	
 	
