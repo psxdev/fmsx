@@ -227,6 +227,5 @@ fMSX for PlayStation 4
   
   ![alt text](https://raw.github.com/psxdev/fmsx/master/system/credits.png "msxorbis credits")
   
-  Special thanks goes to:
   
  
