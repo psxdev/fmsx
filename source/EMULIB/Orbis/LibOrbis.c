@@ -21,10 +21,10 @@
 #include <string.h>
 #include "menu.h"
 
-extern int flipArg;
+extern int64_t flipArg;
 extern Image NormScreen;          /* Main screen image              */
 extern Image WideScreen;          /* Wide screen image              */
-extern int menuClosed;
+extern int displayNumber;
 int vmode;
 
 #define FPS_COLOR PIXEL(255,0,255)
@@ -98,12 +98,14 @@ void TrashOrbis(void)
 int ShowVideo(void)
 {
 	int ret;
-	if(menuClosed==1)
+	if(displayNumber==0)
 	{
+		if(OutImg.Data)
     	ScaleImage(&OutImg,VideoImg,VideoX,VideoY,VideoW,VideoH);
 	
 		orbis2dStartDrawing();
 		orbis2dClearBuffer(0);
+		if(OutImg.Data)
 		orbis2dPutImage(OutImg.Data, 0, 0, 1280, 720);
 	
 	
@@ -117,7 +119,7 @@ int ShowVideo(void)
 	}
 	else
 	{
-		menuOpen();
+		showBrowser();
 		ret=0;
 	}
 	
@@ -227,7 +229,11 @@ pixel *NewImage(Image *Img,int Width,int Height)
   /* Image depth we are going to use */
   Depth = 32;
   Img->Data=(unsigned int *)malloc(Width*Height*Depth/8);
-
+  if(Img->Data==NULL)
+  {
+  	Img->Data=mmap(NULL,Width*Height*Depth/8,0x01|0x02,0x1000|0x0002,-1,0);
+  	
+  }
 if(Img->Data!=NULL)
 {
  
@@ -238,6 +244,10 @@ if(Img->Data!=NULL)
     Img->L     = Width;
     Img->D     = Depth;
     Img->Attrs = Effects;
+}
+else
+{
+	debugNetPrintf(DEBUG,"[MSX]error creating image\n");
 }
   return(Img->Data);
 }

@@ -3,11 +3,12 @@
  * Copyright (C) 2017 Antonio Jose Ramos Marquez (aka bigboss) @psxdev on twitter
  * Repository https://github.com/psxdev/fmsx
  */
-#include "menu.h"
-#include "MSX.h"
-#include "browser.h"
 #include <orbisPad.h>
 #include <orbis2d.h>
+#include <ps4link.h>
+#include "menu.h"
+#include "browser.h"
+#include "MSX.h"
 
 int menuLevel=MENU_ABOUT;
 int menuStatus=MENU_NOT_SELECTED;
@@ -15,20 +16,25 @@ int menuContextStatus=MENU_CONTEXT_CLOSED;
 int menuMsx=MSX_MSX2;
 int menuVideo=MSX_PAL;
 int msxmode;
-int menuClosed=1;
 int menuExit=0;
+extern int displayNumber;
 extern int64_t flipArg;
 extern int flag;
 
-extern Orbis2dTexture *icons;
+extern Orbis2dTexture *settingsTexture;
+
+
 void menuAction()
 {
 	switch(menuGetStatus())
 	{
 		
 		case MENU_ABOUT_SELECTED:
-		debugNetPrintf(INFO,"based on work from Marat Fayzullin original author of this incredible emulator https://fms.komkon.org/fMSX/\n");			
-		menuStatus=MENU_NOT_SELECTED;
+		//debugNetPrintf(INFO,"based on work from Marat Fayzullin original author of this incredible emulator https://fms.komkon.org/fMSX/\n");	
+			showCredits();	
+			if(displayNumber!=1)	
+			displayNumber=2;
+			menuStatus=MENU_NOT_SELECTED;
 			break;
 		case MENU_MSX1_SELECTED:
 		case MENU_MSX2_SELECTED:
@@ -38,40 +44,13 @@ void menuAction()
 			menuStatus=MENU_NOT_SELECTED;
 			msxmode=menuMsx|menuVideo|MSX_GUESSA|MSX_GUESSB;
 			debugNetPrintf(INFO,"Changing Mode %x to %x \n",Mode,msxmode);
-			
-			menuClosed=0;
+			displayNumber=2;
 			break;
 		case MENU_RESET_SELECTED:
 			menuStatus=MENU_NOT_SELECTED;
 			debugNetPrintf(INFO,"Mode %x %x %x \n",msxmode,msxmode&MSX_MODEL,msxmode&MSX_VIDEO);
 			ResetMSX(msxmode,32,8);
-			break;
-		case MENU_MEGAROM1_SELECTED:
-			menuStatus=MENU_NOT_SELECTED;
-			menuClosed=0;
-			showBrowser(MENU_MEGAROM1);
-			menuClosed=1;
-			//LoadCart("host0:GAMES/GRADIUS2.ROM",0,MAP_GUESS);
-			break;
-		case MENU_MEGAROM2_SELECTED:
-			menuStatus=MENU_NOT_SELECTED;
-			showBrowser(MENU_MEGAROM2);
-			//LoadCart("host0:GAMES/SOLIDE12.ROM",0,MAP_GUESS);
-			break;
-		case MENU_DISKA_SELECTED:
-			menuStatus=MENU_NOT_SELECTED;
-			showBrowser(MENU_DISKA);
-			//LoadFileDrive("host0:GAMES/ABADIA.DSK",0);
-			break;
-		case MENU_DISKB_SELECTED:
-			menuStatus=MENU_NOT_SELECTED;
-			showBrowser(MENU_DISKB);
-			//LoadFileDrive("host0:GAMES/DRIVEB.DSK",1);
-			break;
-		case MENU_TAPE_SELECTED:
-			menuStatus=MENU_NOT_SELECTED;
-			showBrowser(MENU_TAPE);
-			//ChangeTape("host0:GAMES/DEFAULT.CAS");
+			displayNumber=0;
 			break;
 		default:
 			menuStatus=MENU_NOT_SELECTED;
@@ -142,13 +121,14 @@ void updateController()
 		{
 			debugNetPrintf(DEBUG,"Triangle pressed exit\n");
 			
-			flag=0;
+			//flag=0;
 				
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_CIRCLE))
 		{
-			debugNetPrintf(DEBUG,"Circle pressed come back to MSX\n");
-			menuClosed=1;
+			debugNetPrintf(DEBUG,"Circle pressed come back to browser\n");
+			//menuClosed=1;
+			displayNumber=1;
 			menuExit=1;
 			
 		}
@@ -156,7 +136,7 @@ void updateController()
 		{
 			debugNetPrintf(DEBUG,"Cross pressed\n");
 			menuStatusChange();
-			menuClosed=1;
+			//displayNumber=2;
 			//menuSetContextStatus(MENU_CONTEXT_OPENING);
 			//debugNetPrintf(3,"Context menu OPENING\n");
 			
@@ -164,6 +144,8 @@ void updateController()
 		if(orbisPadGetButtonPressed(ORBISPAD_SQUARE))
 		{
 			debugNetPrintf(DEBUG,"Square pressed\n");
+			displayNumber=1;
+			
 			//orbisAudioPause(0);				
 		}
 		if(orbisPadGetButtonPressed(ORBISPAD_L1))
@@ -229,7 +211,8 @@ void menuStatusChange()
 		{
 			case MENU_ABOUT:
 				menuSetStatus(MENU_ABOUT_SELECTED);
-				menuClosed=1;
+				//menuClosed=1;
+				displayNumber=3;
 				break;
 			case MENU_MSX1:
 				menuSetStatus(MENU_MSX1_SELECTED);
@@ -253,27 +236,7 @@ void menuStatusChange()
 				break;
 			case MENU_RESET:
 				menuSetStatus(MENU_RESET_SELECTED);
-				menuClosed=1;
-				break;
-			case MENU_MEGAROM1:
-				menuSetStatus(MENU_MEGAROM1_SELECTED);
-				menuClosed=1;
-				break;
-			case MENU_MEGAROM2:
-				menuSetStatus(MENU_MEGAROM2_SELECTED);
-				menuClosed=1;
-				break;
-			case MENU_DISKA:
-				menuSetStatus(MENU_DISKA_SELECTED);
-				menuClosed=1;
-				break;
-			case MENU_DISKB:
-				menuSetStatus(MENU_DISKB_SELECTED);
-				menuClosed=1;	
-				break;
-			case MENU_TAPE:
-				menuSetStatus(MENU_TAPE_SELECTED);
-				menuClosed=1;
+				displayNumber=0;
 				break;
 			default:
 				break;
@@ -297,13 +260,6 @@ void menuLevelUp()
 			menuSetLevel(MENU_MSX1);
 			break;
 		case MENU_RESET:
-		case MENU_MEGAROM1:
-		case MENU_MEGAROM2:
-		case MENU_DISKA:
-		case MENU_DISKB:
-		case MENU_TAPE:
-			menuSetLevel(MENU_VIDEO_NTSC);
-			break;
 		default:
 			menuSetLevel(MENU_ABOUT);
 			break;
@@ -319,18 +275,13 @@ void menuLevelDown()
 		case MENU_MSX1:
 		case MENU_MSX2:
 		case MENU_MSX2PLUS:
-			menuSetLevel(MENU_VIDEO_NTSC);
+			menuSetLevel(MENU_VIDEO_PAL);
 			break;
 		case MENU_VIDEO_NTSC:
 		case MENU_VIDEO_PAL:
 			menuSetLevel(MENU_RESET);
 			break;
 		case MENU_RESET:
-		case MENU_MEGAROM1:
-		case MENU_MEGAROM2:
-		case MENU_DISKA:
-		case MENU_DISKB:
-		case MENU_TAPE:
 			menuSetLevel(MENU_ABOUT);
 			break;
 		default:
@@ -360,22 +311,6 @@ void menuLevelRight()
 			menuSetLevel(MENU_VIDEO_NTSC);
 			break;
 		case MENU_RESET:
-			menuSetLevel(MENU_MEGAROM1);
-			break;
-		case MENU_MEGAROM1:
-			menuSetLevel(MENU_MEGAROM2);
-			break;
-		case MENU_MEGAROM2:
-			menuSetLevel(MENU_DISKA);
-			break;
-		case MENU_DISKA:
-			menuSetLevel(MENU_DISKB);
-			break;
-		case MENU_DISKB:
-			menuSetLevel(MENU_TAPE);
-			break;
-		case MENU_TAPE:
-			menuSetLevel(MENU_RESET);
 			break;
 		default:
 			menuSetLevel(MENU_ABOUT);
@@ -404,22 +339,6 @@ void menuLevelLeft()
 			menuSetLevel(MENU_VIDEO_NTSC);
 			break;
 		case MENU_RESET:
-			menuSetLevel(MENU_TAPE);
-			break;
-		case MENU_MEGAROM1:
-			menuSetLevel(MENU_RESET);
-			break;
-		case MENU_MEGAROM2:
-			menuSetLevel(MENU_MEGAROM1);
-			break;
-		case MENU_DISKA:
-			menuSetLevel(MENU_MEGAROM2);
-			break;
-		case MENU_DISKB:
-			menuSetLevel(MENU_DISKA);
-			break;
-		case MENU_TAPE:
-			menuSetLevel(MENU_DISKB);
 			break;
 		default:
 			menuSetLevel(MENU_ABOUT);
@@ -428,14 +347,7 @@ void menuLevelLeft()
 }
 void menuFinish()
 {
-	orbis2dDestroyTexture(icons);
-}
-void menuDrawIcons()
-{
-	if(icons)
-	{
-		orbis2dDrawTexture(icons,0,0);	
-	}
+	//orbis2dDestroyTexture(icons);
 }
 void menuDrawIconsMaskSelected()
 {
@@ -548,36 +460,6 @@ void menuDrawIconsMaskSelect()
 				w=ICON_RESET_MASK_W;
 				h=ICON_RESET_MASK_H;
 				break;
-			case MENU_MEGAROM1:
-				x=ICON_MEGAROM1_MASK_X;
-				y=ICON_MEGAROM1_MASK_Y;
-				w=ICON_MEGAROM1_MASK_W;
-				h=ICON_MEGAROM1_MASK_H;
-				break;
-			case MENU_MEGAROM2:
-				x=ICON_MEGAROM2_MASK_X;
-				y=ICON_MEGAROM2_MASK_Y;
-				w=ICON_MEGAROM2_MASK_W;
-				h=ICON_MEGAROM2_MASK_H;
-				break;
-			case MENU_DISKA:
-				x=ICON_DISKA_MASK_X;
-				y=ICON_DISKA_MASK_Y;
-				w=ICON_DISKA_MASK_W;
-				h=ICON_DISKA_MASK_H;
-				break;
-			case MENU_DISKB:
-				x=ICON_DISKB_MASK_X;
-				y=ICON_DISKB_MASK_Y;
-				w=ICON_DISKB_MASK_W;
-				h=ICON_DISKB_MASK_H;
-				break;
-			case MENU_TAPE:
-				x=ICON_TAPE_MASK_X;
-				y=ICON_TAPE_MASK_Y;
-				w=ICON_TAPE_MASK_W;
-				h=ICON_TAPE_MASK_H;
-				break;	
 			default:
 				x=ICON_ABOUT_MASK_X;
 				y=ICON_ABOUT_MASK_Y;
@@ -596,41 +478,77 @@ void menuDrawIconsMaskSelect()
 		
 		
 }
-
-
 int menuInit()
 {
 	int ret=0;
-	icons=orbis2dLoadPngFromHost(ICONS_FILE_PATH);
+	/*icons=orbis2dLoadPngFromHost(ICONS_FILE_PATH);
 	if(icons)
 	{
+		browserBackground=orbis2dLoadPngFromHost(BROWSERBACKGROUND_FILE_PATH);
+		if(browserBackground)
+		{
+			
+		}
+		else
+		{
+			ret=-1;
+			debugNetPrintf(ERROR,"Problem loading browser image file from %s \n",BROWSERBACKGROUND_FILE_PATH);
 		
+		}
+		folder_icon=orbis2dLoadPngFromHost(FOLDER_ICON_PATH);
+		if(folder_icon)
+		{
+			debugNetPrintf(DEBUG,"load browser image file from %s \n",FOLDER_ICON_PATH);
+		
+		}
+		else
+		{
+			debugNetPrintf(DEBUG,"Problem loading browser image file from %s \n",FOLDER_ICON_PATH);
+	
+		}
+		file_icon=orbis2dLoadPngFromHost(FILE_ICON_PATH);
+		if(file_icon)
+		{
+			debugNetPrintf(DEBUG,"load browser image file from %s \n",FILE_ICON_PATH);
+		
+		}
+		else
+		{
+			debugNetPrintf(DEBUG,"Problem loading browser image file from %s \n",FILE_ICON_PATH);
+	
+		}
 	}
 	else
 	{
 		ret=-1;
 		debugNetPrintf(ERROR,"Problem loading Icon image file from %s \n",ICONS_FILE_PATH);
 		
-	}
+	}*/
 	menuLevel=0;
 	return ret;
  
 }
-void menuDraw()
+void settingsDraw()
 {
+	if(displayNumber==2)
+	{
 	//draw icons texture
-	menuDrawIcons();
+	if(settingsTexture)
+	{
+		orbis2dDrawTexture(settingsTexture,0,0);	
+	}
 	//draw red square for selected icons
 	menuDrawIconsMaskSelected();
 	//draw yellow square to current icon
 	menuDrawIconsMaskSelect();
-	
+	}
 }
-void menuOpen()
+void showSettings()
 {
-	orbisAudioPause(0);
-	
-	while(menuClosed==0)
+	menuLevel=0;
+	//orbisAudioPause(0);
+	displayNumber=2;
+	while(displayNumber==2)
 	{
 		updateController();
 		
@@ -642,21 +560,21 @@ void menuOpen()
 			
 		//default red is here press X to random color
 		//orbis2dDrawRectColor(x,w,y,h,color);
-		menuDraw();	
+		settingsDraw();	
 		//flush and flip
 		orbis2dFinishDrawing(flipArg);
 			
 		//swap buffers
 		orbis2dSwapBuffers();
 		flipArg++;
-		if(menuClosed==1)
-		{
+		//if(displayNumber==3 || displayNumber==1)
+		//{
 			if(menuExit!=1)
 			{
 				menuAction();
 			}
 			menuExit=0;
-		}
+			//}
 	}
 	
 }

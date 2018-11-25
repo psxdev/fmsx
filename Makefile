@@ -12,7 +12,7 @@ endif
 
 keepelf = True
 target ?= ps4_elf
-
+TargetFile=msxorbis.elf
 #need to add this flags
 #-Wl,-T script.ld
 

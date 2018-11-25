@@ -25,10 +25,10 @@
 #define WIDTH       272                   /* Buffer width    */
 #define HEIGHT      228                   /* Buffer height   */
 extern int vmode;
-extern flipArg;
+extern int64_t flipArg;
 int counter=0;
 extern OrbisPadConfig *confPad;
-extern menuClosed;
+extern int displayNumber;
 /* Press/Release keys in the background KeyState */
 #define XKBD_SET(K) XKeyState[Keys[K][0]]&=~Keys[K][1]
 #define XKBD_RES(K) XKeyState[Keys[K][0]]|=Keys[K][1]
@@ -253,7 +253,7 @@ void Keyboard(void)
 		orbisPadSetCurrentButtonsPressed(buttons);
 		//LoadCart("host0:ROM/GRADIUS2.ROM",0,MAP_GUESS);
 		//ResetMSX(Mode,32,4);
-		menuClosed=0;
+		displayNumber=1;
 		//LoadFile("host0:ROM/ABADIA.DSK");
 	}
 	if(orbisPadGetButtonPressed(ORBISPAD_L1|ORBISPAD_R1))

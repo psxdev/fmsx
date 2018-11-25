@@ -4,69 +4,45 @@
 #include <debugnet.h>
 
 #define RED_COLOR 0x80ff0000
-#define YELLOW_COLOR 0x80ffff00 
-#define BACKGROUND_FILE_PATH "host0:system/background.png"
-#define ICONS_FILE_PATH "host0:system/fmsxtexture.png"
+#define YELLOW_COLOR 0xFF24FFBD 
+#define SETTINGS_FILE_PATH "host0:system/settings.png"
+#define CREDITS_FILE_PATH "host0:system/credits.png"
 
-#define ICON_ABOUT_MASK_X 520
-#define ICON_ABOUT_MASK_Y 145
-#define ICON_ABOUT_MASK_W 245
-#define ICON_ABOUT_MASK_H 105
+#define ICON_ABOUT_MASK_X 499
+#define ICON_ABOUT_MASK_Y 220
+#define ICON_ABOUT_MASK_W 305
+#define ICON_ABOUT_MASK_H 167
 
-#define ICON_MSX1_MASK_X 262
-#define ICON_MSX1_MASK_Y 266
-#define ICON_MSX1_MASK_W 205
-#define ICON_MSX1_MASK_H 90
+#define ICON_MSX1_MASK_X 501
+#define ICON_MSX1_MASK_Y 388
+#define ICON_MSX1_MASK_W 56
+#define ICON_MSX1_MASK_H 23
 
-#define ICON_MSX2_MASK_X 469
-#define ICON_MSX2_MASK_Y 266
-#define ICON_MSX2_MASK_W 250
-#define ICON_MSX2_MASK_H 90
+#define ICON_MSX2_MASK_X 571
+#define ICON_MSX2_MASK_Y 388
+#define ICON_MSX2_MASK_W 69
+#define ICON_MSX2_MASK_H 23
 
-#define ICON_MSX2PLUS_MASK_X 721
-#define ICON_MSX2PLUS_MASK_Y 266
-#define ICON_MSX2PLUS_MASK_W 300
-#define ICON_MSX2PLUS_MASK_H 90
+#define ICON_MSX2PLUS_MASK_X 650
+#define ICON_MSX2PLUS_MASK_Y 388
+#define ICON_MSX2PLUS_MASK_W 84
+#define ICON_MSX2PLUS_MASK_H 23
 
-#define ICON_VIDEO_NTSC_MASK_X 507
-#define ICON_VIDEO_NTSC_MASK_Y 397
-#define ICON_VIDEO_NTSC_MASK_W 152
-#define ICON_VIDEO_NTSC_MASK_H 51
+#define ICON_VIDEO_NTSC_MASK_X 653
+#define ICON_VIDEO_NTSC_MASK_Y 421
+#define ICON_VIDEO_NTSC_MASK_W 44
+#define ICON_VIDEO_NTSC_MASK_H 16
 
-#define ICON_VIDEO_PAL_MASK_X 670
-#define ICON_VIDEO_PAL_MASK_Y 397
-#define ICON_VIDEO_PAL_MASK_W 105
-#define ICON_VIDEO_PAL_MASK_H 51
+#define ICON_VIDEO_PAL_MASK_X 606
+#define ICON_VIDEO_PAL_MASK_Y 421
+#define ICON_VIDEO_PAL_MASK_W 34
+#define ICON_VIDEO_PAL_MASK_H 16
  
-#define ICON_RESET_MASK_X 361
-#define ICON_RESET_MASK_Y 495
-#define ICON_RESET_MASK_W 68
-#define ICON_RESET_MASK_H 80
+#define ICON_RESET_MASK_X 612
+#define ICON_RESET_MASK_Y 447
+#define ICON_RESET_MASK_W 66
+#define ICON_RESET_MASK_H 71
 
-#define ICON_MEGAROM1_MASK_X 429
-#define ICON_MEGAROM1_MASK_Y 495
-#define ICON_MEGAROM1_MASK_W 111
-#define ICON_MEGAROM1_MASK_H 80
-
-#define ICON_MEGAROM2_MASK_X 541
-#define ICON_MEGAROM2_MASK_Y 495
-#define ICON_MEGAROM2_MASK_W 111
-#define ICON_MEGAROM2_MASK_H 80
-
-#define ICON_DISKA_MASK_X 651
-#define ICON_DISKA_MASK_Y 491
-#define ICON_DISKA_MASK_W 85
-#define ICON_DISKA_MASK_H 87
-
-#define ICON_DISKB_MASK_X 736
-#define ICON_DISKB_MASK_Y 491
-#define ICON_DISKB_MASK_W 85
-#define ICON_DISKB_MASK_H 87
-
-#define ICON_TAPE_MASK_X 821
-#define ICON_TAPE_MASK_Y 495
-#define ICON_TAPE_MASK_W 102
-#define ICON_TAPE_MASK_H 80
 
 
 
@@ -129,5 +105,7 @@ void menuLevelLeft();
 void menuLevelRight();
 void menuDraw();
 void menuStatusChange();
+void showCredits();
+void showSettings();
 
 #endif

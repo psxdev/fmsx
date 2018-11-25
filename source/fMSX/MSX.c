@@ -503,26 +503,26 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   /* Try loading font */
   if(FNTName)
   {
-    if(Verbose) debugNetPrintf(INFO,"Loading %s font...",FNTName);
+    if(Verbose) debugNetPrintf(INFO,"Loading %s font...\n",FNTName);
     J=LoadFNT(FNTName);
     PRINTRESULT(J);
   }
-
-  if(Verbose) debugNetPrintf(INFO,"Loading optional ROMs: ");
+  //sleep(1);
+  if(Verbose) debugNetPrintf(INFO,"Loading optional ROMs: \n");
 
   /* Try loading CMOS memory contents */
   if(LoadROM("host0:system/CMOS.ROM",sizeof(RTC),(byte *)RTC))
-  { if(Verbose) debugNetPrintf(INFO,"CMOS.ROM.."); }
+  { if(Verbose) debugNetPrintf(INFO,"CMOS.ROM..\n"); }
   else memcpy(RTC,RTCInit,sizeof(RTC));
 
   /* Try loading Kanji alphabet ROM */
   if((Kanji=LoadROM("host0:system/KANJI.ROM",0x20000,0)))
-  { if(Verbose) debugNetPrintf(INFO,"KANJI.ROM.."); }
+  { if(Verbose) debugNetPrintf(INFO,"KANJI.ROM..\n"); }
 
   /* Try loading RS232 support ROM to slot */
   if((P=LoadROM("host0:system/RS232.ROM",0x4000,0)))
   {
-    if(Verbose) debugNetPrintf(INFO,"RS232.ROM..");
+    if(Verbose) debugNetPrintf(INFO,"RS232.ROM..\n");
     MemMap[3][3][2]=P;
     MemMap[3][3][3]=P+0x2000;
   }
@@ -709,7 +709,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
     switch(NewMode&MSX_MODEL)
     {
       case MSX_MSX1:
-        if(Verbose) debugNetPrintf(INFO,"  Opening MSX.ROM...");
+        if(Verbose) debugNetPrintf(INFO,"  Opening MSX.ROM...\n");
         P1=LoadROM("host0:system/MSX.ROM",0x8000,0);
         PRINTRESULT(P1);
         if(!P1) NewMode=(NewMode&~MSX_MODEL)|(Mode&MSX_MODEL);
@@ -727,15 +727,15 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
         break;
 
       case MSX_MSX2:
-        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2.ROM...");
+        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2.ROM...\n");
         P1=LoadROM("host0:system/MSX2.ROM",0x8000,0);
         PRINTRESULT(P1);
-        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2EXT.ROM...");
+        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2EXT.ROM...\n");
         P2=LoadROM("host0:system/MSX2EXT.ROM",0x4000,0);
         PRINTRESULT(P2);
         if(!P1||!P2) 
         {
-			debugNetPrintf(INFO,"error in model");
+			debugNetPrintf(INFO,"error in model\n");
           NewMode=(NewMode&~MSX_MODEL)|(Mode&MSX_MODEL);
           FreeMemory(P1);
           FreeMemory(P2);
@@ -754,10 +754,10 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
         break;
 
       case MSX_MSX2P:
-        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2P.ROM...");
+        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2P.ROM...\n");
         P1=LoadROM("host0:system/MSX2P.ROM",0x8000,0);
         PRINTRESULT(P1);
-        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2PEXT.ROM...");
+        if(Verbose) debugNetPrintf(INFO,"  Opening MSX2PEXT.ROM...\n");
         P2=LoadROM("host0:system/MSX2PEXT.ROM",0x4000,0);
         PRINTRESULT(P2);
         if(!P1||!P2) 
@@ -808,7 +808,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   {
     
     /* Try loading DiskROM */
-    if(Verbose) debugNetPrintf(INFO,"  Opening DISK.ROM...");
+    if(Verbose) debugNetPrintf(INFO,"  Opening DISK.ROM...\n");
     P1=LoadROM("host0:system/DISK.ROM",0x4000,0);
     PRINTRESULT(P1);
 
@@ -866,7 +866,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   /* If changing amount of RAM... */
   if(NewRAMPages!=RAMPages)
   {
-    if(Verbose) debugNetPrintf(INFO,"Allocating %dkB for RAM...",NewRAMPages*16);
+    if(Verbose) debugNetPrintf(INFO,"Allocating %dkB for RAM...\n",NewRAMPages*16);
     if((P1=GetMemory(NewRAMPages*0x4000)))
     {
       memset(P1,NORAM,NewRAMPages*0x4000);
@@ -881,7 +881,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   /* If changing amount of VRAM... */
   if(NewVRAMPages!=VRAMPages)
   {
-    if(Verbose) debugNetPrintf(INFO,"Allocating %dkB for VRAM...",NewVRAMPages*16);
+    if(Verbose) debugNetPrintf(INFO,"Allocating %dkB for VRAM...\n",NewVRAMPages*16);
     if((P1=GetMemory(NewVRAMPages*0x4000)))
     {
       memset(P1,0x00,NewVRAMPages*0x4000);
@@ -987,6 +987,8 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   /* Reset soundchips */
   debugNetPrintf(INFO,"jaaaaaarrarr 7\n");
   ResetSound();
+  orbisAudioResume(0);
+  
 #endif
   /* Reset CPU */
   ResetZ80(&CPU);
@@ -2562,6 +2564,110 @@ int LoadFileDrive(const char *FileName, byte diskdrive)
 /** Guess MegaROM mapper of a ROM.                          **/
 /*************************************************************/
 int GuessROM(const byte *Buf,int Size)
+{
+	int J,I,K,ROMCount[MAXMAPPERS];
+	char S[256];
+	char *newS;
+	int newS_size;
+	int F;
+	int i;
+	F=ps4LinkOpen("host0:system/CARTS.CRC",O_RDONLY,0);
+	/* Try opening file with CRCs */
+	if(F>0)
+	{
+		/* Compute ROM's CRC */
+		for(J=K=0;J<Size;++J) K+=Buf[J];
+
+		/* Scan file comparing CRCs */
+		while(ps4LinkRead(F,S,sizeof(S)-4))
+			if(sscanf(S,"%08X %d",&J,&I)==2)
+				if(K==J) { ps4LinkClose(F);return(I); }
+
+		/* Nothing found */
+		ps4LinkClose(F);
+	}
+	F=ps4LinkOpen("host0:system/CARTS.SHA",O_RDONLY,0);
+	/* Try opening file with SHA1 sums */
+	if(F>0)
+	{
+		char S1[41],S2[41];
+		SHA1 C;
+
+		/* Compute ROM's SHA1 */
+		ResetSHA1(&C);
+		InputSHA1(&C,Buf,Size);
+		if(ComputeSHA1(&C))
+		{
+			sprintf(S1,"%08x%08x%08x%08x%08x",C.Msg[0],C.Msg[1],C.Msg[2],C.Msg[3],C.Msg[4]);
+			
+			newS_size=ps4LinkLseek(F,0,SEEK_END);
+			ps4LinkLseek(F,0,SEEK_SET);
+			newS=malloc(newS_size);
+			ps4LinkRead(F,newS,newS_size);
+			ps4LinkClose(F);
+			for(i=0;i<newS_size/(sizeof(S)-4);i++)
+			{
+				if((sscanf(&newS[i*(sizeof(S)-4)],"%40s %d",S2,&J)==2) && !strcmp(S1,S2))
+				{
+					return(J);
+				}
+				
+			}
+			free(newS);
+			/* Search for computed SHA1 in the file */
+			//while(ps4LinkRead(F,S,sizeof(S)-4))
+			//	if((sscanf(S,"%40s %d",S2,&J)==2) && !strcmp(S1,S2))
+			//	{ ps4LinkClose(F);return(J); }
+		}
+
+		/* Nothing found */
+		//ps4LinkClose(F);
+	}
+
+	/* Clear all counters */
+	for(J=0;J<MAXMAPPERS;++J) ROMCount[J]=1;
+	/* Generic 8kB mapper is default */
+	ROMCount[MAP_GEN8]+=1;
+	/* ASCII 16kB preferred over ASCII 8kB */
+	ROMCount[MAP_ASCII16]-=1;
+
+	/* Count occurences of characteristic addresses */
+	for(J=0;J<Size-2;++J)
+	{
+		I=Buf[J]+((int)Buf[J+1]<<8)+((int)Buf[J+2]<<16);
+		switch(I)
+		{
+			case 0x500032: ROMCount[MAP_KONAMI5]++;break;
+			case 0x900032: ROMCount[MAP_KONAMI5]++;break;
+			case 0xB00032: ROMCount[MAP_KONAMI5]++;break;
+			case 0x400032: ROMCount[MAP_KONAMI4]++;break;
+			case 0x800032: ROMCount[MAP_KONAMI4]++;break;
+			case 0xA00032: ROMCount[MAP_KONAMI4]++;break;
+			case 0x680032: ROMCount[MAP_ASCII8]++;break;
+			case 0x780032: ROMCount[MAP_ASCII8]++;break;
+			case 0x600032: ROMCount[MAP_KONAMI4]++;
+				ROMCount[MAP_ASCII8]++;
+				ROMCount[MAP_ASCII16]++;
+				break;
+			case 0x700032: ROMCount[MAP_KONAMI5]++;
+				ROMCount[MAP_ASCII8]++;
+				ROMCount[MAP_ASCII16]++;
+				break;
+			case 0x77FF32: ROMCount[MAP_ASCII16]++;break;
+		}
+	}
+
+	/* Find which mapper type got more hits */	
+	for(I=0,J=0;J<MAXMAPPERS;++J)
+	if(ROMCount[J]>ROMCount[I]) I=J;
+
+	/* Return the most likely mapper type */
+	return(I);
+}
+/** GuessROM() ***********************************************/
+/** Guess MegaROM mapper of a ROM.                          **/
+/*************************************************************/
+int GuessROMold(const byte *Buf,int Size)
 {
   int J,I,K,ROMCount[MAXMAPPERS];
   char S[256];

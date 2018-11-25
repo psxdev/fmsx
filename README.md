@@ -29,26 +29,23 @@ fMSX for PlayStation 4
  2) Compile fmsx
   
   
-  
-  
   ```
   git clone https://github.com/psxdev/fmsx
   cd fmsx
   make
   ```
-  copy bin/fmsx to use it like homebrew.elf in ps4sh
+  copy bin/msxorbis.elf to ps4sh/bin folder or where you are executing ps4sh binary
 
- 3) You will need ps4sh because all is loaded from host
+ 3) You will need ps4sh because all is loaded from host using IV0002-NPXS29041_00-MSXORBIS00000000.pkg look for it or make your own using code from https://gist.github.com/psxdev/a7cf37729986039a2283c00aa454ebb8
  	
-  If you have a directory where ps4sh binary is create
+  If you have a folder where ps4sh binary is located, please create there:
   ```
   mkdir system
   mkdir GAMES
   ```
   
-  Put your msx system rom and  CARTS.SHA and fmsxtexture.png on system
+  Put your msx system rom and  CARTS.SHA and png files from system directoty from this repository on your new system folder
   ```
-  -rw-r--r--@ 1 bigboss  staff   33152 21 oct 20:17 CARTS.SHA
   -rw-r--r--@ 1 bigboss  staff   16384 24 oct 23:16 DISK.ROM
   -rw-r--r--@ 1 bigboss  staff  131072 22 oct 00:45 KANJI.ROM
   -rw-r--r--@ 1 bigboss  staff   32768 15 oct 00:32 MSX.ROM
@@ -56,15 +53,20 @@ fMSX for PlayStation 4
   -rw-r--r--@ 1 bigboss  staff   16384 23 dic 13:30 MSX2EXT.ROM
   -rw-r--r--@ 1 bigboss  staff   32768 15 oct 00:32 MSX2P.ROM
   -rw-r--r--@ 1 bigboss  staff   16384 15 oct 00:32 MSX2PEXT.ROM
-  -rw-r--r--@ 1 bigboss  staff  218746 23 dic 20:08 fmsxtexture.png
+  -rw-r--r--  1 bigboss  staff   33152 25 nov 18:38 CARTS.SHA
+  -rw-r--r--@ 1 bigboss  staff   48679 25 nov 18:25 browser.png
+  -rw-r--r--@ 1 bigboss  staff  142695 25 nov 18:25 credits.png
+  -rw-r--r--@ 1 bigboss  staff    1932 25 nov 18:59 file_icon.png
+  -rw-r--r--@ 1 bigboss  staff     199 25 nov 18:59 folder_icon.png
+  -rw-r--r--@ 1 bigboss  staff   69966 25 nov 18:27 settings.png
   ```
   Put your .ROM .DSK .CAS games on GAMES
   
   
   
- 4) Before execute homebrew.elf you need ps4sh running on directory where system and GAMES folders are created. Load orbislink pkg and you will see logs in your ps4sh tool
+ 4) Before execute msxorbis.elf you need ps4sh running on directory where system and GAMES folders are created. Load msxorbis pkg and you will see logs in your ps4sh tool
  
- After you see orbislink splash screen execute connect command on ps4sh
+ After you see msxorbis splash screen execute connect command on ps4sh
   
  ```
  bigmini:bin bigboss$ ./ps4sh
@@ -196,16 +198,26 @@ fMSX for PlayStation 4
  
  5) ready to have a lot of fun :P 
  
- You can choose MSX MSX2 and MSX2+ and PAL or NTSC.
+ MSX2 is loaded by default, if you has bluetooth keyboard you can write your basic programs :p
  
- Red power button let you reset the system and go to basic prompt.
- You can choose 2 cart slot, 2 floppy and 1 cassete files. When you are in ugly browser after press x in the file who has the * it will load the file, later you will see reset the system and load is done
+ Press L2+R2 to go to menu where you can browser in your pc/mac folders to choose a ROM or DSK or CAS press X 
+ 
+ ![alt text](https://raw.github.com/psxdev/fmsx/master/system/browser.png "msxorbis settings")
+ 
+ You can go to settings pressing triangle 
+ 
+ You can choose MSX MSX2 and MSX2+ and PAL or NTSC mode, pressing X 
+ 
+ ![alt text](https://raw.github.com/psxdev/fmsx/master/system/settings.png "msxorbis settings")
+ 
+ Red power button let you reset the msx system with new settings.
  
  6) I wait that this can help to developers really interested in homebrew if you want piracy this is not for you. Respect the licenses from fMSX part please.
 
 
   Change log
 ===========================
+ - 12/10/2018 msxorbis code for 5th MSX RU Sevilla 2018
  - 25/12/2017 Initial release
  - 23/06/2018 5.05 support
  
@@ -213,12 +225,8 @@ fMSX for PlayStation 4
   Credits
 ===========================
   
+  ![alt text](https://raw.github.com/psxdev/fmsx/master/system/credits.png "msxorbis credits")
+  
   Special thanks goes to:
   
-  - Marat Fayzullin original author of this incredible emulator
-  - Akop Karapetyan author of psp port. I learned a lot from it porting to PlayStation Vita. Audio part is heavily based on his work. http://psp.akop.org/fmsx.htm
-  - Hitodama for his incredible work with ps4sdk i wait that you can come back soon
-  - @frangar, @xerpi @theflow0 and rest of people involved in vitasdk for their incredible work on Vita, it helped a lot :P. Some parts of liborbis are based on their work  
-  - All ps3dev and ps2dev old comrades
-  - droogie,z80,wildcard,zecoxao and all people on discord, i told you a few months ago about this emulator and finally is here
-  
+ 

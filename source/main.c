@@ -17,6 +17,7 @@
 #include <debugnet.h>
 #include <orbisFileBrowser.h>
 #include "menu.h"
+#include "browser.h"
 
 typedef struct OrbisGlobalConf
 {
@@ -45,7 +46,19 @@ int flag=0;
 //int closeMenu=0;
 Orbis2dConfig *conf;
 OrbisPadConfig *confPad;
-Orbis2dTexture *icons=NULL;
+
+//extern char browserBackground[];
+//extern char settingsBackground[];
+//extern char creditsBackground[];
+//extern char folder_icon[];
+//extern char file_icon[];
+Orbis2dTexture *browserTexture=NULL;
+Orbis2dTexture *folderTexture=NULL;
+Orbis2dTexture *fileTexture=NULL;
+
+Orbis2dTexture *settingsTexture=NULL;
+Orbis2dTexture *creditsTexture=NULL;
+
 int col=0;
 void finishApp()
 {
@@ -56,6 +69,28 @@ void finishApp()
 	ps4LinkFinish();
 		
 }
+void initTextures()
+{
+	browserTexture=orbis2dLoadPngFromHost_v2(BROWSERBACKGROUND_FILE_PATH);
+	//creditsTexture=orbis2dLoadPngFromHost_v2(CREDITS_FILE_PATH);
+	settingsTexture=orbis2dLoadPngFromHost_v2(SETTINGS_FILE_PATH);
+	folderTexture=orbis2dLoadPngFromHost_v2(FOLDER_ICON_PATH);
+	fileTexture=orbis2dLoadPngFromHost_v2(FILE_ICON_PATH);
+	creditsTexture=orbis2dLoadPngFromHost_v2(CREDITS_FILE_PATH);
+	if(!creditsTexture)
+	{
+		debugNetPrintf(DEBUG,"credit chungo\n");
+		
+	}
+	else
+	{
+		debugNetPrintf(DEBUG,"credit bien\n");
+		
+	}
+}
+
+ 
+
 void initApp()
 {
 	int ret;
@@ -84,7 +119,15 @@ void initApp()
 			ret=orbisAudioInitWithConf(myConf->confAudio);
 			if(ret==1)
 			{
-				orbisKeyboardInitWithConf(myConf->confKeyboard);
+				//orbisKeyboardInitWithConf(myConf->confKeyboard);
+				ret=orbisKeyboardInit();
+				debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",ret);
+				if(ret==1)
+				{
+					myConf->confKeyboard=OrbisKeyboardGetConf();
+					ret=orbisKeyboardOpen();
+					debugNetPrintf(DEBUG,"orbisKeyboardOpen %d\n",ret);
+				}
 				//ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,512,48000,ORBISAUDIO_FORMAT_S16_MONO);
 				//ret=orbisAudioInitChannel(ORBISAUDIO_CHANNEL_MAIN,1024,48000,ORBISAUDIO_FORMAT_S16_STEREO);
 				//debugNetPrintf(DEBUG,"orbisKeyboardInit %d\n",orbisKeyboardInit());
@@ -115,10 +158,11 @@ int main(int argc, char *argv[])
 	/*Mod_Init(0);
 	Mod_Load("host0:zweifeld.mod");
 	Mod_Play();*/
-    orbisAudioResume(0);
-	menuInit();
+   // orbisAudioResume(0);
+    orbisAudioPause(0);
 	
-	
+	initTextures();
+	debugNetPrintf(DEBUG,"after initTextures...\n");
 	
 	
 	while(flag)
